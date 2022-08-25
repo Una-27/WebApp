@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Actor&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Akaya+Telivigala&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alata&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alef&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alegreya+Sans&amp;display=swap">
+    <link rel="stylesheet" href="assets/css/styles.min.css">
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <nav class="navbar navbar-light navbar-expand-lg navigation-clean navbar-fixed-top" style="background: linear-gradient(90deg, rgb(185, 171, 196) 0%, rgb(223, 216, 224));">
+        <div class="container">
+            @Html.ActionLink("HairCatalina", "Index", "Home", new { area = "" }, new { @class = "navbar-brand brandtext" })
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navcol-1">
+                <span style="background-color: black" class="icon-bar"></span>
+                <span style="background-color: black" class="icon-bar"></span>
+                <span style="background-color: black" class="icon-bar"></span>
+            </button>
+            <div id="navcol-1" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav ms-auto">
+                    <li class="nav-item"></li>
+                    <li class="nav-item">@Html.ActionLink("Расписание", "List_Page", "Home", new { @class = "navtext" })</li>
+                    <li class="nav-item">@Html.ActionLink("Отчеты", "Reports_Page", "Home", new { @class = "navtext" })</li>
+                    <li class="nav-item">@Html.ActionLink("Клиенты", "Client_Page", "Home", new { @class = "navtext" })</li>
+                    <li class="nav-item">@Html.ActionLink("Мастера", "Master_Page", "Home", new { @class = "navtext" })</li>
+                    <li class="nav-item">@Html.ActionLink("Услуги", "Service_Page", "Home", new { @class = "navtext" })</li>
+                    <li class="nav-item">@Html.ActionLink("Финансы", "Finance_Page", "Home", new { @class = "navtext" })</li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/script.min.js"></script>
+
+    @RenderBody()
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

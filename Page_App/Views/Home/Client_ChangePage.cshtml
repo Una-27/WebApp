@@ -1,0 +1,86 @@
+﻿@{
+    //ViewBag.Title = "Изменение информации (клиенты)";
+}
+<section>
+    @if ((ViewBag.Id == -1) || (ViewBag.Id == 0))
+    {
+        <h1 class="headtext">Добавить</h1>
+    }
+    else
+    {
+        <h1 class="headtext">Редактировать</h1>
+    }
+    <div class="container">
+        <div class="row">
+            <div class="col justify-content-center align-items-center">
+                <form method="post">
+                    <div>
+                        <small class="datenavigation">Фамилия</small>
+                        <input id="1" maxlength="50" class="datainput" type="text" name="FirstName" placeholder="Фамилия" value="@ViewBag.FirstName" />
+                        <small id="s1" class="text-danger invisible">Вы неверно ввели фамилию.</small>
+
+                    </div>
+                    <div>
+                        <small class="datenavigation">Имя*</small>
+                        <input id="2" maxlength="50" class="datainput" type="text" name="Name" placeholder="Имя" value="@ViewBag.Name" />
+                        <small id="s2" class="text-danger invisible">Вы неверно ввели имя.</small>
+                    </div>
+                    <div>
+                        <small class="datenavigation">Дата рождения*</small>
+                        <input id="3" max="ViewBag.Date" class="datainput" type="date" name="DateOfBirth" placeholder="Дата рождения" value="@ViewBag.DateOfBirth.ToString("yyyy-MM-dd")" />
+                        <small id="s3" class="text-danger invisible">Вы неверно ввели дату рождения.</small>
+                    </div>
+                    <div>
+                        <small class="datenavigation">Номер телефона*</small>
+                        <input id="4" maxlength="11" class="datainput" name="PhoneNumber" placeholder="Номер телефона" value="@ViewBag.PhoneNumber" />
+                        <small id="s4" class="text-danger invisible">Вы неверно ввели номер телефона.</small>
+                    </div>
+                    <div>
+                        <small class="datenavigation">Размер персональной скидки*</small>
+                        <input id="5" maxlength="3" class="datainput" type="text" name="Discount" placeholder="Персональная скидка, %" value="@ViewBag.Discount" />
+                        <small id="s5" class="text-danger invisible">Скидка.</small>
+                    </div>
+                    <div>
+                        <small class="datenavigation">Канал рекламы*</small>
+                        <select id="i7" class="datainput" name="AdvertisingChannel">
+                            @if (ViewBag.AdvertisingChannel == "Соцсети")
+                            {
+                                <option selected="selected">Соцсети</option>
+                                <option>Друзья/знакомые</option>
+                                <option>Сторонняя реклама</option>
+                            }
+                            else if (ViewBag.AdvertisingChannel == "Друзья/знакомые")
+                            {
+                                <option>Соцсети</option>
+                                <option selected="selected">Друзья/знакомые</option>
+                                <option>Сторонняя реклама</option>
+                            }
+                            else if (ViewBag.AdvertisingChannel == "Сторонняя реклама")
+                            {
+                                <option>Почасовая оплата</option>
+                                <option>Процент от выручки</option>
+                                <option selected="selected">Сторонняя реклама</option>
+                            }
+
+                        </select>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12 d-lg-flex justify-content-lg-center">
+                                <button type="button" onclick="window.location='/Home/Client_Page'" style="width: 150px;" class="btnadd">Назад</button>
+                                <input style="width: 150px;" name="action" class="btnadd" type="submit" value="Сохранить" />
+                                <input style="width: 150px;" name="action" class="btnadd" type="submit" value="Удалить" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+
+</script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/script.min.js"></script>

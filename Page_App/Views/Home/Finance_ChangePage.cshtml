@@ -1,0 +1,80 @@
+﻿@{
+    //ViewBag.Title = "Изменение информации (клиенты)";
+}
+<section>
+    @if ((ViewBag.Id == -1) || (ViewBag.Id == 0))
+    {
+        <h1 class="headtext">Добавить</h1>
+    }
+    else
+    {
+        <h1 class="headtext">Редактировать</h1>
+    }
+    <div class="container">
+        <div class="row">
+            <div class="col justify-content-center align-items-center">
+                <form method="post">
+                    <div>
+                        <small class="datenavigation">Категория</small>
+                        <select id="i7" class="datainput" name="Category">
+                            <option>Акции</option>
+                            <option>Аренда</option>
+                            <option>Налоги</option>
+                            <option>Оборудование</option>
+                            <option>Расходники</option>
+                            <option>Другое</option>
+                        </select>
+                        <small id="s1" class="text-danger invisible">.</small>
+
+                    </div>
+                    <div>
+                        <small class="datenavigation">Тип*</small>
+                        <select id="i7" class="datainput" name="Type">
+                            @if (@ViewBag.Type)
+                            {
+                                <option selected="selected">Доход</option>
+                                <option>Расход</option>
+                            }
+                            else
+                            {
+                                <option>Доход</option>
+                                <option selected="selected">Расход</option>
+                            }
+                        </select>
+
+                    </div>
+                    <div>
+                        <small class="datenavigation">Сумма*</small>
+                        <input id="4" maxlength="11" class="datainput" name="Summa" placeholder="Сумма" value="@ViewBag.Summa" />
+                        <small id="s4" class="text-danger invisible">Только числа.</small>
+                    </div>
+                    <div>
+                        <small class="datenavigation">Дата*</small>
+                        <input id="3" max="ViewBag.Date" class="datainput" type="date" name="Date" placeholder="Дата" value="@ViewBag.Date.ToString("yyyy-MM-dd")" />
+                        <small id="s3" class="text-danger invisible">Вы неверно ввели дату.</small>
+                    </div>
+                    <div>
+                        <small class="datenavigation">Информация*</small>
+                        <input id="3" max="ViewBag.Date" class="datainput" type="text" name="Info" placeholder="Информация" value="@ViewBag.Info" />
+                        <small id="s3" class="text-danger invisible">Вы неверно ввели дату.</small>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12 d-lg-flex justify-content-lg-center">
+                                <button type="button" onclick="window.location='/Home/Client_Page'" style="width: 150px;" class="btnadd">Назад</button>
+                                <input style="width: 150px;" name="action" class="btnadd" type="submit" value="Сохранить" />
+                                <input style="width: 150px;" name="action" class="btnadd" type="submit" value="Удалить" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+
+</script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/script.min.js"></script>

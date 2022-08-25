@@ -1,0 +1,325 @@
+﻿@{
+    var fileM_ = "/Una/Kursovaya/Page_App/Page_App/Home/file/ChartMaster.jpg";
+    var fileS_ = "/Una/Kursovaya/Page_App/Page_App/Home/file/ChartService.jpg";
+    var fileFp_ = "/Una/Kursovaya/Page_App/Page_App/Home/file/ChartFinancePlus.jpg";
+    var fileFm_ = "/Una/Kursovaya/Page_App/Page_App/Home/file/ChartFinanceMinus.jpg";
+    var fileC_ = "/Una/Kursovaya/Page_App/Page_App/Home/file/ChartClient.jpg";
+
+    List<string> XvalueM_ = new List<string>(), XvalueS_ = new List<string>(), XvalueC_ = new List<string>();
+    List<int> YvalueM_ = new List<int>(), YvalueS_ = new List<int>(), YvalueC_ = new List<int>();
+
+    List<string> XvalueFp_ = new List<string>(), XvalueFm_ = new List<string>();
+    List<int> YvalueFp_ = new List<int>(), YvalueFm_ = new List<int>();
+    int summaFm = 0;
+    int summaFp = 0;
+
+    foreach (var m in ViewBag.M_)
+    {
+        XvalueM_.Add(m.FirstName + " " + m.Name);
+        YvalueM_.Add(0);
+    }
+    foreach (var s in ViewBag.S_)
+    {
+        XvalueS_.Add(s.Name);
+        YvalueS_.Add(0);
+    }
+    XvalueC_.Add("Новые");
+    XvalueC_.Add("Постоянные");
+    XvalueC_.Add("Потерянные");
+    for (int i = 0; i < 3; i++)
+    {
+        YvalueC_.Add(0);
+    }
+    foreach (var l in ViewBag.T_)
+    {
+        foreach (var m in ViewBag.M_)
+        {
+            if ((l.Date.Date >= ViewBag.Date1.Date) && (l.Date.Date <= ViewBag.Date2.Date))
+            {
+                if (m == l.IdMaster)
+                {
+                    YvalueM_[m.Id - 1] += l.Price;
+                }
+            }
+        }
+        foreach (var s in ViewBag.S_)
+        {
+            if ((l.Date.Date >= ViewBag.Date1.Date) && (l.Date.Date <= ViewBag.Date2.Date))
+            {
+                if (s == l.IdService)
+                {
+                    YvalueS_[s.Id - 1] += l.Price;
+                }
+            }
+        }
+    }
+    foreach (var c in ViewBag.C_)
+    {
+        if ((c.DateAdded.Date >= ViewBag.Date1.Date) && (c.DateAdded.Date <= ViewBag.Date2.Date))
+        {
+            YvalueC_[0]++;
+        }
+        else if (c.DateAdded.Date < ViewBag.Date2.Date)
+        {
+            int mis = 0;
+            foreach (var l in ViewBag.T_)
+            {
+                if ((l.Date.Date >= ViewBag.Date1.Date) && (l.Date.Date <= ViewBag.Date2.Date))
+                {
+                    if (l.IdClient == c)
+                    {
+                        mis++;
+                    }
+                }
+            }
+            if (mis != 0)
+            {
+                YvalueC_[1]++;
+            }
+            else
+            {
+                YvalueC_[2]++;
+            }
+        }
+    }
+    for (int i = 2; i >= 0; i--)
+    {
+        if (YvalueC_[i] == 0)
+        {
+            YvalueC_.RemoveAt(i);
+            XvalueC_.RemoveAt(i);
+        }
+    }
+    foreach (var f in ViewBag.F_)
+    {
+        if (f.Type)
+        {
+            summaFp += f.Summa;
+            //доход
+            int mis = 0;
+            foreach (var x in XvalueFp_)
+            {
+                if (x == f.Category)
+                {
+                    mis++;
+                    break;
+                }
+            }
+            if (mis == 0)
+            {
+                XvalueFp_.Add(f.Category);
+                YvalueFp_.Add(f.Summa);
+            }
+            else
+            {
+                YvalueFp_[XvalueFp_.IndexOf(f.Category)] += f.Summa;
+            }
+        }
+        else
+        {
+            summaFm += f.Summa;
+            //расход
+            int mis = 0;
+            foreach (var x in XvalueFm_)
+            {
+                if (x == f.Category)
+                {
+                    mis++;
+                    break;
+                }
+            }
+            if (mis == 0)
+            {
+                XvalueFm_.Add(f.Category);
+                YvalueFm_.Add(f.Summa);
+            }
+            else
+            {
+                YvalueFm_[XvalueFm_.IndexOf(f.Category)] += f.Summa;
+            }
+        }
+    }
+    XvalueFp_.Add("Услуги");
+    YvalueFp_.Add(0);
+    foreach (var l in ViewBag.T_)
+    {
+
+        if ((l.Date.Date >= ViewBag.Date1.Date) && (l.Date.Date <= ViewBag.Date2.Date))
+        {
+            if (l.Date.Date < DateTime.Now.Date)
+            {
+                YvalueFp_[YvalueFp_.Count - 1] += l.Price;
+                summaFp += l.Price;
+            }
+        }
+    }
+
+    var chartM = new Chart(width: 400, height: 250, theme: ChartTheme.Vanilla);
+    chartM.AddTitle("Сотрудники");
+    chartM.AddSeries(xValue: XvalueM_, yValues: YvalueM_);
+    chartM.Save(path: fileM_);
+
+    var chartS = new Chart(width: 400, height: 250, theme: ChartTheme.Vanilla);
+    chartS.AddTitle("Услуги");
+    chartS.AddSeries(xValue: XvalueS_, yValues: YvalueS_);
+    chartS.Save(path: fileS_);
+
+    var chartC = new Chart(width: 400, height: 250);
+    chartC.AddTitle("Клиенты");
+    chartC.AddSeries(chartType: "Pie", xValue: XvalueC_, yValues: YvalueC_);
+    chartC.Save(path: fileC_);
+
+    var chartFp = new Chart(width: 200, height: 200);
+    chartFp.AddTitle("Доходы");
+    chartFp.AddSeries(chartType: "Pie", xValue: XvalueFp_, yValues: YvalueFp_);
+    chartFp.Save(path: fileFp_);
+
+    var chartFm = new Chart(width: 200, height: 200);
+    chartFm.AddTitle("Расходы");
+    chartFm.AddSeries(chartType: "Pie", xValue: XvalueFm_, yValues: YvalueFm_);
+    chartFm.Save(path: fileFm_);
+
+}
+@{
+    ViewBag.Title = "Отчет о работе";
+}
+<section>
+    <h1 class="headtext">Отчеты</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 d-lg-flex justify-content-lg-center align-items-lg-center">
+                <form method="post">
+                    <input name="date1_" id="date1" class="datenavigation" type="date" value="@ViewBag.Date1.ToString("yyyy-MM-dd")" />
+                    <input name="date2_" id="date2" class="datenavigation" type="date" value="@ViewBag.Date2.ToString("yyyy-MM-dd")" />
+                    <input onclick="ch_input()" type="submit" class="btnnavigation" style="margin-left: 10px;width: 40px;height: 40px;" value="✏" />
+                    <input onclick="now()" type="submit" class="btnnavigation" style="margin-left: 10px;width: 40px;height: 40px;" value="@DateTime.Now.Day" />
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 justify-content-center align-items-center">
+                <img src="/Home/file/ChartClient.jpg" />
+            </div>
+            <div class="col-md-4 justify-content-center align-items-center">
+                <div class="col-md-6 justify-content-center align-items-center">
+                    <img src="/Home/file/ChartFinancePlus.jpg" />
+                    <small class="datenavigation">Общий доход: @summaFp</small>
+                </div>
+                <div class="col-md-6 justify-content-center align-items-center">
+                    <img src="/Home/file/ChartFinanceMinus.jpg" />
+                    <small class="datenavigation">Общий расход: @summaFm</small>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 justify-content-center align-items-center">
+                <img src="/Home/file/ChartMaster.jpg" />
+            </div>
+            <div class="col-md-4 justify-content-center align-items-center">
+                <img src="/Home/file/ChartService.jpg" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col justify-content-center align-items-center">
+                <div class="table-responsive d-lg-flex" style="margin-top: 15px;">
+                    <table id="table_id" class="table">
+                        <thead>
+                            <tr class="tdheadselect">
+                                <td class="btn-three" data-text="*Сортировка по ФИО">ФИО</td>
+                                <td class="btn-too">Заработная плата</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var master in ViewBag.M_)
+                            {
+                            <tr onclick="window.location = '/Home/Service_ChangePage/@master.Id'" class="tdbodyselect">
+                                <td>@master.FirstName @master.Name</td>
+                                @if (master.Salary == "Почасовая оплата")
+                                {
+                                    double zp = 0;
+                                    List<DateTime> d = new List<DateTime>();
+                                    foreach (var l in ViewBag.T_)
+                                    {
+                                        if ((l.Date.Date >= ViewBag.Date1.Date) && (l.Date.Date <= ViewBag.Date2.Date))
+                                        {
+                                            if (master == l.IdMaster)
+                                            {
+                                                int mis = 0;
+                                                foreach (var x in d)
+                                                {
+                                                    if (x.Date == l.Date.Date)
+                                                    {
+                                                        mis++;
+                                                        break;
+                                                    }
+                                                }
+                                                if (mis == 0)
+                                                {
+                                                    d.Add(l.Date.Date);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    zp = d.Count * master.Rate;
+                                    <td>@zp</td>
+                                }
+                                else if (master.Salary == "Процент от выручки")
+                                {
+                                    double zp = 0;
+                                    List<DateTime> d = new List<DateTime>();
+                                    foreach (var l in ViewBag.T_)
+                                    {
+                                        if ((l.Date.Date >= ViewBag.Date1.Date) && (l.Date.Date <= ViewBag.Date2.Date))
+                                        {
+                                            if (master == l.IdMaster)
+                                            {
+                                                zp += l.Price;
+                                            }
+                                        }
+                                    }
+                                    zp = zp * master.Rate;
+                                    <td>@zp</td>
+                                }
+                                else
+                                {
+                                    double zp = 0;
+                                    List<DateTime> d = new List<DateTime>();
+                                    foreach (var l in ViewBag.T_)
+                                    {
+                                        if ((l.Date.Date >= ViewBag.Date1.Date) && (l.Date.Date <= ViewBag.Date2.Date))
+                                        {
+                                            if (master == l.IdMaster)
+                                            {
+                                                zp += l.Price * 0.15;
+                                            }
+                                        }
+                                    }
+                                    zp = zp / 2 + 15 * master.Rate;
+                                    <td>@zp</td>
+                                }
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function now() {
+        document.querySelector("#date1").value = "";
+        document.querySelector("#date2").value = "";
+
+    }
+    function ch_input() {
+        document.getElementById("@(ViewBag.Date1)").value = now.Parse(document.querySelector("#date1").value);
+        document.getElementById("@(ViewBag.Date2)").value = now.Parse(document.querySelector("#date2").value);
+        window.location.reload();
+    }
+</script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/script.min.js"></script>

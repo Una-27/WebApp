@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "Сотрудники";
+}
+<section>
+    <h1 class="headtext">Мастера</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 d-lg-flex justify-content-lg-center">
+                <button class="btnadd" onclick="window.location = '/Home/Master_ChangePage/-1'">Добавить запись</button>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col justify-content-center align-items-center">
+                <div></div>
+                <div class="table-responsive d-lg-flex" style="margin-top: 15px;">
+                    <table id="table_id" class="table">
+                        <thead>
+                            <tr class="tdheadselect">
+                                <td class="btn-three" data-text="*Сортировка по ФИО">ФИО</td>
+                                <td class="btn-too">Дата рождения</td>
+                                <td class="btn-too">Номер телефона</td>
+                                <td class="btn-too">Профеcсия</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var master in ViewBag.M_)
+                            {
+                                <tr onclick="window.location = '/Home/Master_ChangePage/@master.Id'" class="tdbodyselect">
+                                    <td>@master.FirstName @master.Name @master.MiddleName</td>
+                                    <td>@master.DateOfBirth.Date</td>
+                                    <td>@master.PhoneNumber</td>
+                                    <td>@master.Profession</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    let tbody = document.querySelector("#table_id tbody");
+    let rows = [...tbody.querySelectorAll("tr")];
+    let columns = [...document.querySelectorAll("#table_id thead td")];
+    for (let e of columns) e.onclick = td_click;
+
+    function td_click() {
+        let i = columns.indexOf(this);
+        rows.sort((a, b) => a.cells[i].textContent.localeCompare(b.cells[i].textContent));
+        for (let e of rows) tbody.appendChild(e);
+    }
+</script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/script.min.js"></script>

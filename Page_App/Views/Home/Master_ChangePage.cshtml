@@ -1,0 +1,147 @@
+﻿@{
+    //ViewBag.Title = "Редактирование карточки";
+}
+<section>
+    @if ((ViewBag.Id == -1) || (ViewBag.Id == 0))
+    {
+        <h1 class="headtext">Добавить</h1>
+    }
+    else
+    {
+        <h1 class="headtext">Редактировать</h1>
+    }
+    <form enctype="multipart/form-data" method="post" id="form_">
+        <fieldset>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 justify-content-center align-items-center">
+                        <div>
+                            <small class="datenavigation">Фамилия</small>
+                            <input id="i1" maxlength="50" class="datainput" type="text" name="FirstName" placeholder="Фамилия" value="@ViewBag.FirstName" />
+                            <small id="s1" class="text-danger invisible">Вы неверно ввели фамилию.</small>
+
+                        </div>
+                        <div>
+                            <small class="datenavigation">Имя*</small>
+                            <input id="i2" maxlength="50" class="datainput" type="text" name="Name" placeholder="Имя" value="@ViewBag.Name" />
+                            <small id="s2" class="text-danger invisible">Вы неверно ввели имя.</small>
+                        </div>
+                        <div>
+                            <small class="datenavigation">Отчество</small>
+                            <input id="i3" maxlength="50" class="datainput" type="text" name="MiddleName" placeholder="Отчество" value="@ViewBag.MiddleName" />
+                            <small id="s3" class="text-danger invisible">Вы неверно ввели отчество.</small>
+                        </div>
+                        <div>
+                            <small class="datenavigation">Дата рождения*</small>
+                            <input id="i4" max="ViewBag.Date" class="datainput" type="date" name="DateOfBirth" placeholder="Дата рождения" value="@ViewBag.DateOfBirth.ToString("yyyy-MM-dd")" />
+                            <small id="s4" class="text-danger invisible">Вы неверно ввели дату рождения.</small>
+                        </div>
+                        <div>
+                            <small class="datenavigation">Номер телефона*</small>
+                            <input id="i5" maxlength="11" placeholder="Пример, 79123456789" class="datainput" name="PhoneNumber" value="@ViewBag.PhoneNumber" />
+                            <small id="s5" class="text-danger invisible">Вы неверно ввели номер телефона.</small>
+                        </div>
+                        <div>
+                            <small class="datenavigation">Профессия</small>
+                            <input id="i6" class="datainput" type="text" name="Profession" placeholder="Профессия" value="@ViewBag.Profession" />
+                            <small id="s6" class="text-danger invisible">Профессия.</small>
+                        </div>
+                        <div>
+                            <small class="datenavigation">Способ оплаты труда*</small>
+                            <select id="i7" class="datainput" name="Salary">
+                                @if (ViewBag.Salary == "Почасовая оплата")
+                                {
+                                    <option selected="selected">Почасовая оплата</option>
+                                    <option>Процент от выручки</option>
+                                    <option>Смешанный</option>
+                                }
+                                else if (ViewBag.Salary == "Процент от выручки")
+                                {
+                                    <option>Почасовая оплата</option>
+                                    <option selected="selected">Процент от выручки</option>
+                                    <option>Смешанный</option>
+                                }
+                                else if (ViewBag.Salary == "Смешанный")
+                                {
+                                    <option>Почасовая оплата</option>
+                                    <option>Процент от выручки</option>
+                                    <option selected="selected">Смешанный</option>
+                                }
+
+                            </select>
+                        </div>
+                        <div>
+                            <small class="datenavigation">Ставка*</small>
+                            <input id="i8" class="datainput" type="number" name="Rate" placeholder="Ставка" value="@ViewBag.Rate" />
+                            <small id="s8" class="text-danger invisible">Ставка.</small>
+                        </div>
+                        <div>
+                            <small class="datenavigation">Фотография</small>
+                            <input id="i9" class="datainput" type="file" name="image" placeholder="Фотография" />
+                            <small id="s9" class="text-danger invisible">Фотография.</small>
+                        </div>
+                        <div>
+                            <small class="datenavigation">Информация*</small>
+                            <textarea id="i10" class="datainput" name="Info" placeholder="Инфорация о сотруднике">@ViewBag.Info</textarea>
+                            <small id="s10" class="text-danger invisible">Информация.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 d-lg-flex justify-content-lg-center">
+                        <button type="button" onclick="window.location='/Home/Master_Page'" style="width: 150px;" class="btnadd">Назад</button>
+                        <input style="width: 150px;" class="btnadd" onclick="check()" name="action" type="button" value="Сохранить" />
+                        <input style="width: 150px;" class="btnadd" name="action" type="submit" value="Удалить" />
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</section>
+
+
+
+<script>
+
+    function inputvalid(in_, type_) {
+        var mis = 0;
+        var letters_ = "";
+
+        if (type_ == 0) {
+            letters_ = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя -";
+        }
+        else if (type_ == 1) {
+            letters_ = "0123456789";
+        }
+
+        for (let i = 0; i < in_.length; i++) {
+            for (let j = 0; j < letters_.length; j++) {
+                if (in_[i].toLowerCase() == letters_[j]) {
+                    mis++;
+                }
+            }
+        }
+        if ((mis == in_.length) && (in_.length > 0))
+            return true;
+        else
+            return false;
+    }
+
+    function check() {
+        var input_ = document.querySelector("#i1");
+        var small_ = document.querySelector("#s1");
+
+        if (inputvalid(input_.value, 0)) {
+            let form = document.querySelector("#form_");
+            form.method = 'POST';
+            form.submit();
+        }
+        else {
+            small_.classList.remove("invisible");
+        }
+    }
+</script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/script.min.js"></script>

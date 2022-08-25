@@ -1,0 +1,161 @@
+﻿@{
+    ViewBag.Title = "Расписание сотрудников";
+}
+<section>
+    <h1 class="headtext">Расписание</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 d-lg-flex justify-content-lg-center align-items-lg-center">
+                <form method="post">
+                    <input type="submit" onclick="minus()" class="btnnavigation" value="←" />
+                    <input name="date_" id="date" class="datenavigation" type="date" value="@ViewBag.Date.ToString("yyyy-MM-dd")" />
+                    <input onclick="plus()" type="submit" class="btnnavigation" value="→" />
+                    <input onclick="ch_input()" type="submit" class="btnnavigation" style="margin-left: 10px;width: 40px;height: 40px;" value="✏" />
+                    <input onclick="now()" type="submit" class="btnnavigation" style="margin-left: 10px;width: 40px;height: 40px;" value="@DateTime.Now.Day" />
+                    <button onclick="window.location.reload()" class="btnadd">Добавить запись</button>
+                </form>
+            </div>
+            <!--<div class="col-md-6">
+                <div id="btnimg" style="background-image: url(https://uploads-ssl.webflow.com/5fe27a8ff37f45c3cec526fe/6032fa4a06a953bedc7ab2ad_No%20Picture%20GoalsWon%20Reviews.png); " data-text="Стилист по причёскам Екатерина Тарасова"></div>
+                <div id="btnimg" style="background-image: url(https://uploads-ssl.webflow.com/5fe27a8ff37f45c3cec526fe/6032fa4a06a953bedc7ab2ad_No%20Picture%20GoalsWon%20Reviews.png); " data-text="Стилист по причёскам Екатерина Тарасова"></div>
+            </div>-->
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col justify-content-center align-items-center">
+                <div class="table-responsive d-lg-flex" style="margin-top: 15px;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="tdhead"></th>
+                                @foreach (var master in ViewBag.M_)
+                                {
+                                    <th class="tdhead">@master.FirstName @master.Name</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (var i = 9; i < 18; i++)
+                            {
+                            <tr class="tablerow">
+                                <!--onclick="window.location.href = &#39;client.html&#39;"-->
+
+                                <th class="font-monospace" rowspan="2">
+                                    <div style="height:100%; text-align: right; vertical-align:top; font-size: 10px">
+                                        <small>00</small>
+                                        <small style="color:white;"><br /> .</small>
+                                    </div>
+                                    <div class="">
+                                        @i.00
+                                    </div>
+                                    <div style="height: 100%; text-align: right; vertical-align: bottom; font-size: 10px">
+                                        <small style="color:white;">.</small>
+                                        <small><br />30</small>
+                                    </div>
+                                </th>
+                                @foreach (var master in ViewBag.M_)
+                                {
+                                    var tdmis = 0;
+                                    foreach (var list in ViewBag.Data)
+                                    {
+
+                                        if ((list.IdMaster.Id == master.Id) && (list.Date.ToString("yyyy-MM-dd") == ViewBag.Date.ToString("yyyy-MM-dd")))
+                                        {
+                                            if ((i >= list.TimeStart) && (i < list.TimeEnd))
+                                            {
+                                                tdmis++;
+                                                if (i == list.TimeStart)
+                                                {
+                                                    var mis = (list.TimeEnd - list.TimeStart) * 2;
+                                                    <td rowspan="@mis" class="tdbodyoccupied">
+                                                        <i>Клиент:</i> @list.IdClient.FirstName @list.IdClient.Name
+                                                        <br /><i>Услуга:</i> @list.IdService.Name
+                                                        <br /><i>Цена:</i> @list.Price рублей
+                                                    </td>
+                                                    break;
+                                                }
+                                            }
+                                            else if ((list.Equals(ViewBag.Lastitem)) && (tdmis == 0))
+                                            {
+                                                <td class="tdbody"></td>
+                                            }
+                                        }
+                                        else if ((list.Equals(ViewBag.Lastitem)) && (tdmis == 0))
+                                        {
+                                            <td class="tdbody"></td>
+                                        }
+                                    }
+                                }
+                            </tr>
+                            <tr class="tablerow">
+                                @foreach (var master in ViewBag.M_)
+                                {
+                                    var tdmis = 0;
+                                    foreach (var list in ViewBag.Data)
+                                    {
+
+                                        if ((list.IdMaster.Id == master.Id) && (list.Date.ToString("yyyy-MM-dd") == ViewBag.Date.ToString("yyyy-MM-dd")))
+                                        {
+                                            if (((i + 0.5) >= list.TimeStart) && ((i + 0.5) < list.TimeEnd))
+                                            {
+                                                tdmis++;
+                                                if ((i + 0.5) == list.TimeStart)
+                                                {
+                                                    var mis = (list.TimeEnd - list.TimeStart) * 2;
+                                                    <td rowspan="@mis" class="tdbodyoccupied">
+                                                        <i>Клиент:</i> @list.IdClient.FirstName @list.IdClient.Name
+                                                        <br /><i>Услуга:</i> @list.IdService.Name
+                                                        <br /><i>Цена:</i> @list.Price рублей
+                                                    </td>
+                                                    break;
+                                                }
+                                            }
+                                            else if ((list.Equals(ViewBag.Lastitem)) && (tdmis == 0))
+                                            {
+                                                <td class="tdbody"></td>
+                                            }
+                                        }
+                                        else if ((list.Equals(ViewBag.Lastitem)) && (tdmis == 0))
+                                        {
+                                            <td class="tdbody"></td>
+                                        }
+                                    }
+                                }
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function plus() {
+        let input = document.getElementById('date');
+        input.stepUp(1);
+
+    }
+    function minus() {
+        let input = document.getElementById('date');
+        input.stepDown(1);
+
+    }
+    function now() {
+        let input = document.querySelector("#date");
+        let now = new Date();
+        input.value = "";
+
+    }
+    function ch_input() {
+        var ValueDate = document.getElementById("@(ViewBag.Date)")
+        let input = document.querySelector("#date");
+        let now = new Date();
+        ValueDate.value = now.Parse(input.value);
+        window.location.reload();
+    }
+</script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/script.min.js"></script>
